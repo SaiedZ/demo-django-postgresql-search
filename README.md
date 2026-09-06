@@ -156,7 +156,9 @@ articles/
 │   ├── semantic.py           strategy 4
 │   ├── embeddings.py         abstraction: get_embedder() -> .embed(text)
 │   └── registry.py           catalog (label + explanation sentence + module)
-├── management/commands/load_demo_articles.py
+├── management/commands/
+│   ├── load_demo_articles.py   load fixtures + compute embeddings
+│   └── search_report.py        print the strategy comparison (SEARCH_COMPARISON.md)
 ├── fixtures/demo_articles.json
 └── templates/articles/       base.html, search.html, compare.html
 ```
