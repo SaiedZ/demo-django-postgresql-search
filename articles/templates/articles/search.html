@@ -1,0 +1,35 @@
+{% extends "articles/base.html" %}
+
+{% block content %}
+  <p class="toplink"><a href="{% url 'compare' %}">Compare the four strategies side by side &rarr;</a></p>
+
+  <form class="search" method="get" action="{% url 'search' %}">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search articles..." autofocus>
+    <select name="strategy">
+      {% for key, s in strategies.items %}
+        <option value="{{ key }}" {% if key == strategy_key %}selected{% endif %}>{{ s.label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Search</button>
+  </form>
+  <p class="hint">{{ strategy.description }}</p>
+
+  <p class="count">
+    {% if query %}Query: <strong>{{ query }}</strong> &middot; {% endif %}
+    {{ result_count }} result{{ result_count|pluralize }}
+    {% if not query %} (no query &rarr; showing all articles){% endif %}
+  </p>
+
+  {% for result in results %}
+    <article class="card">
+      <h3>{{ result.article.title }}</h3>
+      <p class="desc">{{ result.article.description }}</p>
+      <p class="body">{{ result.article.content|truncatewords:40 }}</p>
+      {% if result.score is not None %}
+        <span class="score">{{ result.score_label }}: {{ result.score }}</span>
+      {% endif %}
+    </article>
+  {% empty %}
+    <p class="empty">No article matches this query with the "{{ strategy.label }}" strategy.</p>
+  {% endfor %}
+{% endblock %}

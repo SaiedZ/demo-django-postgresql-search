@@ -1,0 +1,132 @@
+[
+  {
+    "title": "Optimizing Django database queries",
+    "description": "How select_related and prefetch_related remove redundant SQL and speed up your views.",
+    "content": "A single template loop over related objects can trigger hundreds of queries. select_related performs a SQL join for foreign key and one-to-one relations, while prefetch_related runs a second query and joins the results in Python for many-to-many and reverse relations. Always measure with django-debug-toolbar before and after the change."
+  },
+  {
+    "title": "Understanding the N+1 query problem",
+    "description": "Why one innocent loop turns into hundreds of database round trips, and how ORMs hide it.",
+    "content": "The N+1 problem happens when you fetch a list of N rows and then issue one extra query per row to load a related object. It is the most common performance issue in applications backed by an ORM. The fix is eager loading: tell the ORM which relations you will need before you start iterating."
+  },
+  {
+    "title": "PostgreSQL indexing strategies",
+    "description": "B-tree, partial, composite, GIN and BRIN indexes and when each one actually pays off.",
+    "content": "An index trades write speed and disk space for read speed. B-tree handles equality and range queries. Partial indexes only cover rows that match a condition. GIN indexes power full text search and jsonb containment. Confirm that your index is used with EXPLAIN ANALYZE instead of guessing."
+  },
+  {
+    "title": "Full text search with PostgreSQL and Django",
+    "description": "Using SearchVector, SearchQuery and SearchRank from django.contrib.postgres.search.",
+    "content": "PostgreSQL turns documents into a tsvector and queries into a tsquery, applying stemming so that run also matches running. Weighting lets you rank a title match above a body match. For larger tables, store the search vector in its own column and add a GIN index on it."
+  },
+  {
+    "title": "Fuzzy search with pg_trgm trigram similarity",
+    "description": "Approximate string matching that tolerates typos using the PostgreSQL pg_trgm extension.",
+    "content": "pg_trgm splits text into groups of three characters and measures how many groups two strings share. It provides the similarity function, the percent operator and GiST or GIN trigram indexes. It is a good fit for search-as-you-type and for matching a misspelled name."
+  },
+  {
+    "title": "Designing a REST API with Django",
+    "description": "Resource naming, status codes, pagination and versioning for a clean HTTP interface.",
+    "content": "A REST API exposes resources through predictable URLs and HTTP verbs. Return 201 on creation, 404 for a missing resource and 422 for a validation error. Keep the shape of your responses consistent so clients can rely on it."
+  },
+  {
+    "title": "Paginating large API responses",
+    "description": "Offset pagination versus keyset (cursor) pagination for long result sets.",
+    "content": "Offset pagination is simple but gets slower on deep pages because the database still scans the rows it skips. Keyset pagination uses the last seen sort value as an anchor and stays fast at any depth. Cursors also remain stable when new rows are inserted between requests."
+  },
+  {
+    "title": "User authentication in Django",
+    "description": "Sessions, the login_required decorator and the default authentication backends.",
+    "content": "Django ships a complete authentication system: a user model, session middleware, password hashing and permission checks. The login view creates a session and later requests are identified by the session cookie. Never store a raw password anywhere."
+  },
+  {
+    "title": "Securing session cookies and CSRF tokens",
+    "description": "Hardening the browser side of authentication against cookie theft and request forgery.",
+    "content": "Set the Secure and HttpOnly flags on session cookies and use SameSite to limit cross-site sending. CSRF protection binds a token to the session so a third-party page cannot forge an authenticated request. Rotate the session key whenever a user logs in."
+  },
+  {
+    "title": "Password hashing and credential storage",
+    "description": "Why bcrypt, scrypt and Argon2 exist and how Django stores login credentials.",
+    "content": "A password must never be kept in a reversible form. Modern hashers are deliberately slow and salted so that a leaked database resists brute force attacks. Django upgrades a stored hash transparently the next time the user signs in after you change the algorithm."
+  },
+  {
+    "title": "Writing unit tests for Django models",
+    "description": "Testing model methods, validation and database constraints with the built-in test runner.",
+    "content": "Keep model tests fast and focused: exercise custom methods, clean logic and database constraints. Use setUpTestData to build shared objects once per class. A failing test should point straight at the behaviour that broke."
+  },
+  {
+    "title": "Test fixtures and factories: pytest versus Django TestCase",
+    "description": "Choosing between JSON fixtures, factory_boy and plain object creation in your tests.",
+    "content": "Large JSON fixtures drift away from the models and slow the whole suite down. Factories build only the objects a given test needs and make the intent of the test obvious. pytest-django adds lightweight fixtures and clearer assertions on top of the standard TestCase."
+  },
+  {
+    "title": "Continuous integration for web applications",
+    "description": "Running migrations, linters and the test suite automatically on every push.",
+    "content": "A CI pipeline starts a database, applies migrations, runs the test suite and reports back before code is merged. Cache dependencies between runs to keep it fast. Treat a red pipeline as a stop-the-line event for the team."
+  },
+  {
+    "title": "Caching strategies for faster web pages",
+    "description": "Per-view caching, template fragment caching and the low-level cache API in Django.",
+    "content": "Caching removes repeated work: a rendered page, an expensive query result or a computed value is stored once and reused. The hard part is invalidation, deciding when the stored copy has gone stale. Start with the data that is slow to produce and rarely changes."
+  },
+  {
+    "title": "Reducing page load time and Core Web Vitals",
+    "description": "Practical steps to make a site feel quick: smaller payloads, image handling, render-blocking assets.",
+    "content": "Largest Contentful Paint, Cumulative Layout Shift and Interaction to Next Paint measure how fast a page feels. Compress images, defer non-critical JavaScript and send less HTML. A quicker site improves both the user experience and search ranking."
+  },
+  {
+    "title": "Debugging ERR_CONNECTION_RESET and dropped requests",
+    "description": "Tracking down abrupt connection resets between the browser, the proxy and the app server.",
+    "content": "ERR_CONNECTION_RESET means the TCP connection was closed before a response came back. Frequent causes are a worker timeout, a request body larger than the proxy limit, or the application process crashing while handling the request. Read the nginx error log and the application traceback side by side."
+  },
+  {
+    "title": "Connection pooling with PgBouncer",
+    "description": "Why opening a fresh PostgreSQL connection per request does not scale, and how a pooler fixes it.",
+    "content": "A PostgreSQL connection is a heavyweight operating system process. Under load, hundreds of short-lived connections exhaust memory and CPU. PgBouncer keeps a small pool of real connections and hands them out quickly. Transaction pooling mode gives the best reuse but forbids session-level features."
+  },
+  {
+    "title": "Scaling PostgreSQL with read replicas and partitioning",
+    "description": "Spreading read load and keeping very large tables manageable as data grows.",
+    "content": "A read replica streams changes from the primary server and answers read-only queries, taking pressure off the write node. Declarative partitioning splits one huge table into smaller physical pieces by range or by list, so a query and the autovacuum process touch less data."
+  },
+  {
+    "title": "Software architecture patterns for web apps",
+    "description": "Layered, hexagonal and the modular monolith, with the trade-offs behind the buzzwords.",
+    "content": "Architecture is mostly about where you put boundaries. A layered application is easy to start with. A hexagonal design isolates the core from frameworks at the cost of extra indirection. A modular monolith keeps a single deployable while enforcing seams between modules."
+  },
+  {
+    "title": "When to split a monolith into microservices",
+    "description": "The organisational and operational cost that services add, and when it is worth paying.",
+    "content": "Microservices swap in-process calls for network calls, a shared transaction for eventual consistency, and one deployment for many. They pay off when independent teams need to release independently. For a small team a well-structured monolith is almost always faster to work in."
+  },
+  {
+    "title": "Domain modeling and bounded contexts",
+    "description": "Naming concepts precisely and drawing clear lines between parts of the business.",
+    "content": "A bounded context is a region of the system where a term has exactly one meaning. An Order in billing is not the same thing as an Order in the warehouse. Getting these boundaries right stops you from building a tangled model where every change ripples everywhere."
+  },
+  {
+    "title": "Background jobs and asynchronous tasks in Django",
+    "description": "Moving slow work out of the request and response cycle with a task queue.",
+    "content": "Sending an email, building a report or calling a slow third-party service should not block the user's request. A task queue accepts a job, returns immediately and runs the work in a separate worker process. Make each task idempotent so that a retry is safe."
+  },
+  {
+    "title": "Structured logging and observability",
+    "description": "Emitting logs, metrics and traces that let you answer real questions in production.",
+    "content": "Structured logs attach key and value context to every line so you can filter by request id or user id. Metrics show trends over time; traces show where a single slow request spent its milliseconds. Together they turn the site feels slow into a specific answer."
+  },
+  {
+    "title": "Deploying Django with Gunicorn and Nginx",
+    "description": "A minimal production setup: WSGI workers behind a reverse proxy that serves static files.",
+    "content": "Gunicorn runs several worker processes that execute your Django code. Nginx sits in front of it, terminates TLS, serves static and media files and buffers slow clients. Tune the worker count and the request timeout to match your real traffic."
+  },
+  {
+    "title": "Running database migrations safely in production",
+    "description": "Zero-downtime schema changes: additive steps, batched backfills and avoiding long locks.",
+    "content": "A migration that rewrites a large table or takes an exclusive lock can freeze the whole site. Split the change into safe steps: add a nullable column, backfill it in batches, then add the constraint. Ship code that works with both the old and the new schema at once."
+  },
+  {
+    "title": "Vector search and embeddings for semantic retrieval",
+    "description": "Representing meaning as vectors and finding nearest neighbours with pgvector.",
+    "content": "An embedding model maps a piece of text to a point in a high-dimensional space where similar meanings sit close together. Semantic search embeds the user query and returns the nearest documents by cosine distance. It shines on vague natural-language questions and struggles with an exact code or identifier."
+  }
+]

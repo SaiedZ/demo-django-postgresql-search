@@ -1,0 +1,37 @@
+{% extends "articles/base.html" %}
+
+{% block title %}Compare &middot; PostgreSQL Search Demo{% endblock %}
+
+{% block content %}
+  <p class="toplink"><a href="{% url 'search' %}">&larr; Back to single search</a></p>
+
+  <form class="search" method="get" action="{% url 'compare' %}">
+    <input type="text" name="q" value="{{ query }}" placeholder="Type one query, see all four engines..." autofocus>
+    <button type="submit">Search</button>
+  </form>
+  <p class="hint">Same query, four strategies, top 5 results each. Ideal for screenshots.</p>
+
+  {% if query %}
+    <div class="cols">
+      {% for block in blocks %}
+        <div class="col">
+          <h2>{{ block.label }}</h2>
+          <p class="coldesc">{{ block.total }} result{{ block.total|pluralize }} total</p>
+          {% for result in block.results %}
+            <div class="mini">
+              <strong>{{ result.article.title }}</strong>
+              {% if result.score is not None %}
+                <div class="score">{{ result.score_label }}: {{ result.score }}</div>
+              {% endif %}
+              <p class="body">{{ result.article.description|truncatewords:18 }}</p>
+            </div>
+          {% empty %}
+            <p class="empty">No result.</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">Enter a query to compare the four strategies.</p>
+  {% endif %}
+{% endblock %}
