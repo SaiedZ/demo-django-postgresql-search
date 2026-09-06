@@ -89,6 +89,9 @@ python manage.py runserver
 | `make my website load faster` | synonyms / intent: Semantic surfaces caching and Core Web Vitals |
 | `my Django application makes too many SQL queries` | intent without the exact words: Semantic surfaces the N+1 problem |
 
+See [`SEARCH_COMPARISON.md`](SEARCH_COMPARISON.md) for the **actual** output of
+every strategy on these queries (regenerate with `python manage.py search_report`).
+
 ## 9. Limitations of each strategy
 
 **Contains (`icontains`)**
@@ -122,20 +125,22 @@ python manage.py runserver
 
 ## Summary table
 
-Behaviors **actually observed** with the demo dataset.
+Behaviors **actually observed** with the demo dataset (full details and scores
+in [`SEARCH_COMPARISON.md`](SEARCH_COMPARISON.md)).
 
-| Query type | Contains | Full-text | Trigram | Semantic |
+Legend: ✅✅ clearly best · ✅ works well · ⚠️ partial / noisy / threshold-dependent · ❌ fails
+
+| Query type | Contains | Full Text | Trigram | Semantic |
 |---|---|---|---|---|
-| exact word (`select_related`) | ✅ finds | ✅ finds and ranks | ⚠️ depends on threshold | ⚠️ buried among "nearby" articles |
-| technical identifier (`ERR_CONNECTION_RESET`) | ✅ direct | ✅ | ⚠️ | ❌ weak relevance |
-| several words (`postgresql full text search`) | ⚠️ needs the exact substring | ✅ best ranking | ⚠️ | ✅ decent |
-| words out of order (`Django query optimization`) | ❌ | ✅ | ⚠️ | ✅ |
-| grammatical variant (`testing` vs `tests`) | ❌ | ✅ (stemming) | ⚠️ | ✅ |
-| typo (`autentication`) | ❌ | ❌ | ✅ only one to correct | ⚠️ sometimes |
-| synonym (`make my website load faster`) | ❌ | ⚠️ partial | ❌ | ✅ |
-| user intent (`too many SQL queries`) | ❌ | ⚠️ if shared words | ❌ | ✅ surfaces the N+1 |
-
-✅ suitable · ⚠️ partial or threshold-dependent results · ❌ unsuitable
+| exact identifier (`ERR_CONNECTION_RESET`) | ✅✅ | ✅✅ | ⚠️ (+ noise) | ⚠️ (+ noise) |
+| precise term (`select_related`) | ✅✅ | ✅✅ | ✅ | ⚠️ diluted |
+| several words (`postgresql full text search`) | ❌ | ✅✅ | ⚠️ | ✅ |
+| words out of order (`Django query optimization`) | ❌ | ✅✅ | ⚠️ | ✅ |
+| grammatical variant (`testing` vs `tests`) | ❌ | ✅✅ | ⚠️ | ✅✅ |
+| typo (`autentication`) | ❌ | ❌ | ✅✅ | ⚠️ low score |
+| synonym (`make my website load faster`) | ❌ | ❌ | ⚠️ | ✅✅ |
+| user intent (`too many SQL queries`) | ❌ | ❌ | ❌ | ✅✅ |
+| common word, ranking (`authentication`) | ⚠️ no ranking | ✅✅ | ✅ | ✅ |
 
 ## Code structure
 
